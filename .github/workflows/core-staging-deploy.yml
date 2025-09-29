@@ -1,0 +1,70 @@
+name: Deploy CDKTF to AWS Staging
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # Required for OIDC
+  contents: read    # Required to checkout code
+
+env:
+  AWS_REGION: eu-west-2
+  TERRAFORM_VERSION: 1.13.3
+  NODE_VERSION: 22.20.0
+  AWS_ACCOUNT_ID: 123456789012
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}:role/github-actions-cdktf-deploy-role #This needs to be created in AWS first
+          role-session-name: github-actions-cdktf-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Verify AWS Identity
+        run: aws sts get-caller-identity
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install CDKTF CLI
+        run: npm install -g cdktf-cli
+
+      - name: Verify installations
+        run: |
+          echo "Node version: $(node --version)"
+          echo "NPM version: $(npm --version)"
+          echo "Terraform version: $(terraform --version)"
+          echo "CDKTF version: $(cdktf --version)"
+          echo "AWS CLI version: $(aws --version)"
+
+      - name: CDKTF Get
+        run: cdktf get
+
+      - name: CDKTF Synth
+        run: cdktf synth
+
+      - name: CDKTF Deploy 
+        run: cdktf deploy --auto-approve 'core-infra-staging-*' # all stacks in staging env
