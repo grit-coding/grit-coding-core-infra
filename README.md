@@ -107,15 +107,3 @@ Security is built into every layer of this setup. OIDC authentication ensures th
 | Testing        | ✅ Unit Tests     | ❌ Limited    | ❌ Limited     |
 | Ecosystem      | ✅ npm/TypeScript | ⚠️ Terraform  | ❌ AWS Only    |
 | Learning Curve | ⚠️ Medium         | ✅ Low        | ⚠️ Medium      |
-
-## 🤝 Contributing
-
-Fork the repository, create your feature branch, and make your changes. The automated formatting will ensure code consistency on commit. Run the test suite to verify your changes, then submit a pull request for review.
-
-## 🎯 Next Steps
-
-This foundation supports expansion into monitoring with CloudWatch dashboards, database management with RDS and DynamoDB, comprehensive networking with VPC configurations, secrets management integration, and cost optimization through resource tagging and budgets.
-
----
-
-**Ready to scale your infrastructure?** This setup provides the foundation for enterprise-grade AWS infrastructure management with the power of TypeScript and the flexibility of Terraform.
