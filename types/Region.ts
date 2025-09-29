@@ -1,1 +1,1 @@
-export type Region = 'eu-west-2' | 'ap-northeast-2'
+export type Region = 'eu-west-2' | 'ap-northeast-2';

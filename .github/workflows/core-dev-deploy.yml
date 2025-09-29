@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write   # Required for OIDC
-  contents: read    # Required to checkout code
+  id-token: write # Required for OIDC
+  contents: read # Required to checkout code
 
 env:
   AWS_REGION: eu-west-2
@@ -19,7 +19,7 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -66,5 +66,5 @@ jobs:
       - name: CDKTF Synth
         run: cdktf synth
 
-      - name: CDKTF Deploy 
+      - name: CDKTF Deploy
         run: cdktf deploy --auto-approve 'core-infra-dev-*' # all stacks in dev env
